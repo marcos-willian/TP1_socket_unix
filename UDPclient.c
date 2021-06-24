@@ -8,7 +8,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
-#define PORT	 8080
+#define PORT	 5000
 #define MAXLINE 1024
 
 // Driver code
@@ -29,7 +29,7 @@ int main() {
 	// Filling server information
 	servaddr.sin_family = AF_INET;
 	servaddr.sin_port = htons(PORT);
-	servaddr.sin_addr.s_addr = INADDR_ANY;
+	servaddr.sin_addr.s_addr = inet_addr("172.25.199.182");
 	
 	int n, len;
 	scanf ( "%1024[^\n]", mensage);

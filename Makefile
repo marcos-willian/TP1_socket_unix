@@ -1,8 +1,8 @@
-all: server client
+UDP: UDPserver UDPclient
 
-server: server.c
-	gcc server.c -o server
+UDPserver: UDPserver.c
+	gcc UDPserver.c -o UDPserver
 
-client: client.c
-	gcc client.c -o client
+UDPclient: client.c
+	gcc UDPclient.c -o UDPclient
 	

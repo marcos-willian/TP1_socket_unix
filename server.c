@@ -8,7 +8,7 @@
 #include <arpa/inet.h>
 #include <netinet/in.h>
 
-#define PORT	 3000
+#define PORT	 5000
 #define MAXLINE 1024
 
 // Driver code
@@ -28,7 +28,7 @@ int main() {
 	memset(&cliaddr, 0, sizeof(cliaddr));
 	// Filling server information
 	servaddr.sin_family = AF_INET; // IPv4
-	servaddr.sin_addr.s_addr = inet_addr("172.22.12.91");
+	servaddr.sin_addr.s_addr = INADDR_ANY;
 	servaddr.sin_port = htons(PORT);
 	
 	// Bind the socket with the server address

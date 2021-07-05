@@ -1,16 +1,11 @@
-UDP: UDPserver UDPclient
+Simple: STserver STclient
 
-UDPserver: UDPserver.c
-	gcc UDPserver.c -o UDPserver
+STserver: Simple_talk_Server.c
+	gcc Simple_talk_Server.c -o STserver
 
-UDPclient: UDPclient.c
-	gcc UDPclient.c -o UDPclient
+STclient: Simple_talk_client.c
+	gcc Simple_talk_client.c -o STclient
 
 
-TCP: TCPserver TCPclient
-
-TCPserver: TCPserver.c
-	gcc TCPserver.c -o TCPserver
-
-TCPclient: client.c
-	gcc TCPclient.c -o TCPclient
+clean: 
+	rm *.o

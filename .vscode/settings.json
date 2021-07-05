@@ -1,7 +1,0 @@
-{
-    "files.associations": {
-        "*.js": "javascript",
-        "cstdio": "c",
-        "*.tcc": "c"
-    }
-}

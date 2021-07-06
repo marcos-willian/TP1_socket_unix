@@ -21,7 +21,7 @@ int main(int argc, char * argv[]){
     int sock;
     int len;
 
-   
+    
     if( argc == 2) {
         host = argv[1];
     }else{
@@ -29,8 +29,9 @@ int main(int argc, char * argv[]){
         exit(1);
     }
 
+
     printf("Inicializando client...\n");
-     /**======================
+    /**======================
      **      Inicializa server
      *========================**/
     memset(&server, 0, sizeof(server));
@@ -57,7 +58,7 @@ int main(int argc, char * argv[]){
     /**======================
      **      Troca de mensagem
      *========================**/
-    printf("\nEscreva uma mensagem:\n");
+    printf("\nEscreva uma mensagem:\nClient: ");
     while ((fgets(buf, sizeof(buf), stdin)) && strcmp(buf,"quit\n")){
         buf[MAX_LINE - 1] = '\0';
         len = strlen(buf) + 1;
@@ -66,8 +67,9 @@ int main(int argc, char * argv[]){
             close(sock);
             exit(1);
         }
-        printf("Mensagem enviada com sucesso!\n");
-        printf("\nEscreva uma mensagem:\n");
+        len = recv(sock, buf, sizeof(buf), 0);
+        printf("Server: %s\n", buf);
+        printf("Client: ");
     }
     close(sock);
 }

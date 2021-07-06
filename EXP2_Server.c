@@ -53,8 +53,17 @@ int main(){
         }
         printf("Client conectado\n");
         while(len = recv(client_sock, buf, sizeof(buf), 0)){
-            printf("Cliente:\t");
-            fputs(buf, stdout);
+            printf("Cliente: %s", buf);
+            printf("Server: ");
+            fgets(buf, sizeof(buf), stdin);
+            buf[MAX_LINE - 1] = '\0';
+            len = strlen(buf) + 1;
+            if(send(client_sock, buf, len, 0) < 0){
+                perror("Erro ao enviar mensagem:");
+                close(sock);
+                exit(1);
+            }
+            printf("\n");
         }
         printf("Client desconectado\n");
         close(client_sock);

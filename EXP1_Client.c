@@ -12,6 +12,7 @@
 #define MAX_LINE 256
 
 int main(int argc, char * argv[]){
+    FILE * file_descriptor;
     /**======================
      **      Variáveis
      *========================**/
@@ -20,19 +21,22 @@ int main(int argc, char * argv[]){
     char buf[MAX_LINE];
     int sock;
     int len;
-
-   
-    if( argc == 2) {
+    printf("%s", argv[2]);
+    if( argc == 3) {
         host = argv[1];
+        if((file_descriptor = fopen(argv[2], "r")) == NULL){
+           fprintf(stderr, "Erro ao abrir o arquivo.\n");
+           exit(1); 
+        }
     }else{
-        fprintf(stderr, "Usage: STclient IP_server\n");
+        fprintf(stderr, "Usage: EXP1client IP_server file\n");
         exit(1);
     }
 
-    printf("Inicializando client...\n");
-     /**======================
+    /**======================
      **      Inicializa server
      *========================**/
+    printf("Inicializando client...\n");
     memset(&server, 0, sizeof(server));
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = inet_addr(host);
@@ -57,17 +61,17 @@ int main(int argc, char * argv[]){
     /**======================
      **      Troca de mensagem
      *========================**/
-    printf("\nEscreva uma mensagem:\n");
-    while ((fgets(buf, sizeof(buf), stdin)) && strcmp(buf,"quit\n")){
+    printf("\nLendo mensagem do arquivo:\n");
+    while ((fgets(buf, sizeof(buf), file_descriptor))) {
         buf[MAX_LINE - 1] = '\0';
         len = strlen(buf) + 1;
+        printf("%s", buf);
         if(send(sock, buf, len, 0) < 0){
             perror("Erro ao enviar mensagem:");
             close(sock);
             exit(1);
         }
-        printf("Mensagem enviada com sucesso!\n");
-        printf("\nEscreva uma mensagem:\n");
     }
+    printf("Mensagem enviada com sucesso!\n");
     close(sock);
 }

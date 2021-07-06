@@ -18,8 +18,7 @@ int main(int argc, char * argv[]){
     struct sockaddr_in server;
     char *host;
     char buf[MAX_LINE];
-    int sock;
-    int len;
+    int sock, count;
 
     
     if( argc == 2) {
@@ -61,13 +60,19 @@ int main(int argc, char * argv[]){
     printf("\nEscreva uma mensagem:\nClient: ");
     while ((fgets(buf, sizeof(buf), stdin)) && strcmp(buf,"quit\n")){
         buf[MAX_LINE - 1] = '\0';
-        len = strlen(buf) + 1;
-        if(send(sock, buf, len, 0) < 0){
+        count = strlen(buf) + 1;
+        if(send(sock, buf, count, 0) < 0){
             perror("Erro ao enviar mensagem:");
             close(sock);
             exit(1);
         }
-        len = recv(sock, buf, sizeof(buf), 0);
+        count = recv(sock, buf, sizeof(buf), 0);
+        if(count < 0){
+            perror("Erro ao receber mensagem:");
+            close(sock);
+            exit(1); 
+        }
+        buf[count] = '\0';
         printf("Server: %s\n", buf);
         printf("Client: ");
     }

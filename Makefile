@@ -1,4 +1,4 @@
-all: Simple EXP1 EXP2
+all: Simple EXP1 EXP2 EXP3
 
 Simple: STserver STclient
 
@@ -8,7 +8,8 @@ STserver: Simple_talk_Server.c
 STclient: Simple_talk_client.c
 	gcc Simple_talk_client.c -o STclient
 
-EXP1: EXP1_Client.c
+EXP1: EXP1client
+EXP1client: EXP1_Client.c
 	gcc EXP1_Client.c -o EXP1client
 
 EXP2: EXP2server EXP2client

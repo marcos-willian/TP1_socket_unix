@@ -12,15 +12,14 @@
 #define MAX_LINE 256
 
 int main(int argc, char * argv[]){
-    FILE * file_descriptor;
     /**======================
      **      Variáveis
      *========================**/
+    FILE * file_descriptor;
     struct sockaddr_in server;
     char *host;
     char buf[MAX_LINE];
-    int sock;
-    int len;
+    int sock, len;
     printf("%s", argv[2]);
     if( argc == 3) {
         host = argv[1];

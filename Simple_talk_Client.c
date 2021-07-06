@@ -18,8 +18,7 @@ int main(int argc, char * argv[]){
     struct sockaddr_in server;
     char *host;
     char buf[MAX_LINE];
-    int sock;
-    int len;
+    int sock, len;
 
    
     if( argc == 2) {
@@ -58,7 +57,7 @@ int main(int argc, char * argv[]){
      **      Troca de mensagem
      *========================**/
     printf("\nEscreva uma mensagem:\n");
-    while ((fgets(buf, sizeof(buf), stdin)) && strcmp(buf,"quit\n")){
+    while (((fgets(buf, sizeof(buf), stdin))) && (strcmp(buf,"quit\n") != 0)){
         buf[MAX_LINE - 1] = '\0';
         len = strlen(buf) + 1;
         if(send(sock, buf, len, 0) < 0){

@@ -18,10 +18,9 @@ int main(){
     /**======================
      **      Variáveis
      *========================**/
-    struct sockaddr_in server;
+    struct sockaddr_in server, client_addr;
     char buf[MAX_LINE];
-    int len;
-    int sock, client_sock;
+    int len, count, sock, client_sock;
 
     /**======================
      **      Inicializa servidor
@@ -44,21 +43,27 @@ int main(){
      **      Interação com o client
      *========================**/
     listen(sock, MAX_PENDING);
-    len = sizeof(server);
     while(1){
         printf("\nAguardando conexão do client\n");
-        if((client_sock = accept(sock, (struct sockaddr *) &server/*Endereço do cliente vem aqui!!*/, &len)) < 0){
+        len = sizeof(client_addr);
+        if((client_sock = accept(sock, (struct sockaddr *) &client_addr, &len)) < 0){
             perror("Erro na conexão com o client:");
             exit(1); 
         }
-        printf("Client conectado\n");
-        while(len = recv(client_sock, buf, sizeof(buf), 0)){
+        printf("Client conectado: %s\n", inet_ntoa(client_addr.sin_addr));
+        while(count = recv(client_sock, buf, sizeof(buf), 0)){
+            if(count < 0){
+                perror("Erro ao receber mensagem:");
+                close(sock);
+                exit(1); 
+            }
+            buf[count] = '\0';
             printf("Cliente: %s", buf);
             printf("Server: ");
             fgets(buf, sizeof(buf), stdin);
             buf[MAX_LINE - 1] = '\0';
-            len = strlen(buf) + 1;
-            if(send(client_sock, buf, len, 0) < 0){
+            count = strlen(buf) + 1;
+            if(send(client_sock, buf, count, 0) < 0){
                 perror("Erro ao enviar mensagem:");
                 close(sock);
                 exit(1);

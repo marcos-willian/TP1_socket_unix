@@ -20,7 +20,7 @@ int main(){
      *========================**/
     struct sockaddr_in server, client_addr;
     char buf[MAX_LINE];
-    int len, cont, sock;
+    int len, count, sock;
 
     /**======================
      **      Inicializa servidor
@@ -36,6 +36,7 @@ int main(){
     }
     if((bind(sock, (struct sockaddr *) &server, sizeof(server))) < 0){
         perror("Erro no bind:");
+        close(sock);
         exit(1);  
     }
     printf("Servidor: %s:%d  inicializado com sucesso\n",  inet_ntoa(server.sin_addr), SERVER_PORT);
@@ -45,9 +46,14 @@ int main(){
     len = sizeof(client_addr);
     while(1){
         printf("\nAguardando mensagem do client\n");
-        cont = recvfrom(sock, (char *)buf, sizeof(buf), 0, (struct sockaddr *) &client_addr, &len);
-        buf[cont] = '\0';
-        printf("Cliente:\t%s", buf);
+        count = recvfrom(sock, (char *)buf, sizeof(buf), 0, (struct sockaddr *) &client_addr, &len);
+        if(count < 0){
+            perror("Erro ao receber mensagem:");
+            close(sock);
+            exit(1); 
+        }
+        buf[count] = '\0';
+        printf("Cliente (%s):\t%s", inet_ntoa(client_addr.sin_addr), buf);
     }
     close(sock);
 

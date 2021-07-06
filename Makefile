@@ -17,7 +17,15 @@ EXP2server: EXP2_Server.c
 	gcc EXP2_Server.c -o EXP2server
 
 EXP2client: EXP2_Client.c
-	gcc -g EXP2_Client.c -o EXP2client
+	gcc EXP2_Client.c -o EXP2client
+
+EXP3: EXP3server EXP3client
+
+EXP3server: EXP3_Server.c
+	gcc EXP3_Server.c -o EXP3server
+
+EXP3client: EXP3_Client.c
+	gcc EXP3_Client.c -o EXP3client
 
 clean: 
-	rm STserver STclient EXP1client EXP2server EXP2client
+	rm STserver STclient EXP1client EXP2server EXP2client EXP3server EXP3client

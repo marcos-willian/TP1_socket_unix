@@ -50,7 +50,7 @@ int main(){
             perror("Erro na conexão com o client:");
             exit(1); 
         }
-        printf("Client conectado: %s\n", inet_ntoa(client_addr.sin_addr));
+        printf("Client conectado: %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
         while(count = recv(client_sock, buf, sizeof(buf), 0)){
             if(count < 0){
                 perror("Erro ao receber mensagem:");
@@ -68,7 +68,6 @@ int main(){
                 close(sock);
                 exit(1);
             }
-            printf("\n");
         }
         printf("Client desconectado\n");
         close(client_sock);

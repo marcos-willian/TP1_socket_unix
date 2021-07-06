@@ -73,7 +73,7 @@ int main(int argc, char * argv[]){
             exit(1); 
         }
         buf[count] = '\0';
-        printf("Server: %s\n", buf);
+        printf("Server: %s", buf);
         printf("Client: ");
     }
     close(sock);

@@ -10,7 +10,7 @@
 
 #define SERVER_PORT 54321
 #define SERVER_IP INADDR_ANY
-#define MAX_PENDING 5
+#define MAX_PENDING 1
 #define MAX_LINE 256
 
 int main(){
@@ -53,7 +53,7 @@ int main(){
             close(sock);
             exit(1); 
         }
-        printf("Client conectado: %s\n", inet_ntoa(client_addr.sin_addr));
+        printf("Client conectado: %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
         while(count = recv(client_sock, buf, sizeof(buf), 0)){
             if(count < 0){
                 perror("Erro no receber mensagem:");

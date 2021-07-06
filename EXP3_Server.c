@@ -53,7 +53,7 @@ int main(){
             exit(1); 
         }
         buf[count] = '\0';
-        printf("Cliente (%s):\t%s", inet_ntoa(client_addr.sin_addr), buf);
+        printf("Cliente (%s:%d):\t%s", inet_ntoa(client_addr.sin_addr),  ntohs(client_addr.sin_port), buf);
     }
     close(sock);
 

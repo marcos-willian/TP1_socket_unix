@@ -18,7 +18,7 @@ int main(int argc, char * argv[]){
     struct sockaddr_in server;
     char *host;
     char buf[MAX_LINE];
-    int sock, len;
+    int sock, count;
 
    
     if( argc == 2) {
@@ -40,27 +40,20 @@ int main(int argc, char * argv[]){
     /**======================
      **      Realiza a conexão
      *========================**/
-    if((sock = socket(PF_INET, SOCK_STREAM, 0)) < 0){
+    if((sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0){
         perror("Erro na criação do socket:");
         exit(1);
     }
 
-    printf("Conectando ao servidor: %s:%d\n", host, SERVER_PORT);
-    if(connect(sock, (struct sockaddr *) &server, sizeof(server)) < 0){
-        perror("Erro na conexão:");
-        close(sock);
-        exit(1);
-    }
-    printf("Conectado ao servidor: %s:%d com sucesso\n", host, SERVER_PORT);
-
     /**======================
      **      Troca de mensagem
      *========================**/
+    printf("Enviando menssagem ao servidor: %s:%d\n", host, SERVER_PORT);
     printf("\nEscreva uma mensagem:\n");
-    while (((fgets(buf, sizeof(buf), stdin))) && (strcmp(buf,"quit\n") != 0)){
+    while ((fgets(buf, sizeof(buf), stdin)) && strcmp(buf,"quit\n")){
         buf[MAX_LINE - 1] = '\0';
-        len = strlen(buf) + 1;
-        if(send(sock, buf, len, 0) < 0){
+        count = strlen(buf) + 1;
+        if(sendto(sock, (char *)buf, count, 0, (const struct sockaddr *) &server,	sizeof(server)) < 0){
             perror("Erro ao enviar mensagem:");
             close(sock);
             exit(1);

@@ -25,7 +25,6 @@ int main(){
     /**======================
      **      Inicializa servidor
      *========================**/
-    memset(&client_addr, 0, sizeof(client_addr));
     memset(&server, 0, sizeof(server));
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = SERVER_IP; 
@@ -37,7 +36,6 @@ int main(){
     }
     if((bind(sock, (struct sockaddr *) &server, sizeof(server))) < 0){
         perror("Erro no bind:");
-        close(sock);
         exit(1);  
     }
     printf("Servidor: %s:%d  inicializado com sucesso\n",  inet_ntoa(server.sin_addr), SERVER_PORT);
@@ -50,18 +48,26 @@ int main(){
         len = sizeof(client_addr);
         if((client_sock = accept(sock, (struct sockaddr *) &client_addr, &len)) < 0){
             perror("Erro na conexão com o client:");
-            close(sock);
             exit(1); 
         }
         printf("Client conectado: %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
         while(count = recv(client_sock, buf, sizeof(buf), 0)){
             if(count < 0){
-                perror("Erro no receber mensagem:");
+                perror("Erro ao receber mensagem:");
                 close(sock);
-                exit(1);  
+                exit(1); 
             }
             buf[count] = '\0';
-            printf("Cliente:\t%s", buf);
+            printf("Cliente: %s", buf);
+            printf("Server: ");
+            fgets(buf, sizeof(buf), stdin);
+            buf[MAX_LINE - 1] = '\0';
+            count = strlen(buf) + 1;
+            if(send(client_sock, buf, count, 0) < 0){
+                perror("Erro ao enviar mensagem:");
+                close(sock);
+                exit(1);
+            }
         }
         printf("Client desconectado\n");
         close(client_sock);

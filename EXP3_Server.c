@@ -20,18 +20,17 @@ int main(){
      *========================**/
     struct sockaddr_in server, client_addr;
     char buf[MAX_LINE];
-    int len, count, sock, client_sock;
+    int len, count, sock;
 
     /**======================
      **      Inicializa servidor
      *========================**/
-    memset(&client_addr, 0, sizeof(client_addr));
     memset(&server, 0, sizeof(server));
     server.sin_family = AF_INET;
     server.sin_addr.s_addr = SERVER_IP; 
     server.sin_port = htons(SERVER_PORT);
 
-    if((sock = socket(AF_INET, SOCK_STREAM, 0)) < 0){
+    if((sock = socket(AF_INET, SOCK_DGRAM, 0)) < 0){
         perror("Erro na criação do socket:");
         exit(1);
     }
@@ -44,27 +43,17 @@ int main(){
     /**======================
      **      Interação com o client
      *========================**/
-    listen(sock, MAX_PENDING);
+    len = sizeof(client_addr);
     while(1){
-        printf("\nAguardando conexão do client\n");
-        len = sizeof(client_addr);
-        if((client_sock = accept(sock, (struct sockaddr *) &client_addr, &len)) < 0){
-            perror("Erro na conexão com o client:");
+        printf("\nAguardando mensagem do client\n");
+        count = recvfrom(sock, (char *)buf, sizeof(buf), 0, (struct sockaddr *) &client_addr, &len);
+        if(count < 0){
+            perror("Erro ao receber mensagem:");
             close(sock);
             exit(1); 
         }
-        printf("Client conectado: %s:%d\n", inet_ntoa(client_addr.sin_addr), ntohs(client_addr.sin_port));
-        while(count = recv(client_sock, buf, sizeof(buf), 0)){
-            if(count < 0){
-                perror("Erro no receber mensagem:");
-                close(sock);
-                exit(1);  
-            }
-            buf[count] = '\0';
-            printf("Cliente:\t%s", buf);
-        }
-        printf("Client desconectado\n");
-        close(client_sock);
+        buf[count] = '\0';
+        printf("Cliente (%s:%d):\t%s", inet_ntoa(client_addr.sin_addr),  ntohs(client_addr.sin_port), buf);
     }
     close(sock);
 
